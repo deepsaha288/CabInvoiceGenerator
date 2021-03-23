@@ -42,4 +42,34 @@ public class CabInvoiceGeneratorTesting {
         double fare = invoice.calculateFare(rides);
         Assertions.assertEquals(143.0, fare);
     }
+
+    @Test
+    public void given_multipleRide_shouldreturn_InvoiceSummary() {
+        Ride[] rides = {new Ride(2.0, 5, "NORMAL"),
+                new Ride(4.0, 5, "NORMAL"),
+                new Ride(7.0, 3, "NORMAL")};
+        InvoiceSummary expectedSummary = new InvoiceSummary(143.0, 3);
+        System.out.println("Total no of rides=" + expectedSummary.getRides());
+        System.out.println("Avarage=" + expectedSummary.getAverageFare());
+        InvoiceSummary summary = invoice.calculateInvoiceSummary(rides);
+        System.out.println("Invoice summary=" + summary.getAverageFare());
+        Assertions.assertEquals(expectedSummary.getAverageFare(), summary.getAverageFare());
+    }
+
+    @Test
+    public void givenUserId_InvoiceGenerator_shouldReturn_ListOfRideHistory_AndInvoiceSummary() {
+        String userId = "12345abcd";
+        Ride[] rides = {new Ride(2.0, 5, "NORMAL"),
+                new Ride(4.0, 5, "NORMAL"),
+                new Ride(7.0, 3, "NORMAL")};
+        invoice.addRidesForPerticularUser(userId, rides);
+        InvoiceSummary summary = invoice.getInvoiceSummary(userId);
+        System.out.println("no of rides= " + summary.getRides() + " and Avarage = " + summary.getAverageFare());
+
+        InvoiceSummary expectedSummary = new InvoiceSummary(143.0, 3);
+        System.out.println("expected no of rides = " + expectedSummary.getRides() +
+                " and expected Avarage = " + expectedSummary.getAverageFare());
+        Assertions.assertEquals(expectedSummary.getRides(), summary.getRides());
+    }
+
 }
